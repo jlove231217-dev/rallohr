@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RalloHR — Underrated Picks</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:#06140a;
+  color:#fff4a3
+}
+
+header{
+  padding:22px 6%;
+  border-bottom:1px solid #1b3a22;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  color:#ffdf00
+}
+
+nav a{
+  color:#d8c95c;
+  text-decoration:none;
+  margin-left:22px;
+  font-size:14px
+}
+
+.hero{
+  max-width:1200px;
+  margin:auto;
+  padding:52px 6% 28px
+}
+
+.eyebrow{
+  color:#ffdf00;
+  font-weight:800;
+  font-size:12px;
+  letter-spacing:1.5px
+}
+
+.hero h1{
+  font-size:46px;
+  margin:8px 0
+}
+
+.hero p{
+  color:#9ca8bd;
+  max-width:700px;
+  font-size:16px;
+  line-height:1.55
+}
+
+.stats{
+  max-width:1200px;
+  margin:auto;
+  padding:0 6%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:25px
+}
+
+.stat{
+  background:#0b2112;
+  border:1px solid #2a6035;
+  border-radius:18px;
+  padding:16px
+}
+
+.stat b{
+  font-size:24px
+}
+
+.stat small{
+  display:block;
+  color:#c9bd58;
+  margin-top:4px
+}
+
+.grid{
+  max-width:1200px;
+  margin:auto;
+  padding:0 6% 50px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px
+}
+
+.card{
+  background:#0b2112;
+  border:1px solid #2a6035;
+  border-radius:18px;
+  padding:20px
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px
+}
+
+.player{
+  font-weight:800;
+  font-size:18px
+}
+
+.muted{
+  color:#c9bd58;
+  font-size:13px;
+  margin-top:4px
+}
+
+.pick{
+  font-size:25px;
+  font-weight:900;
+  margin:18px 0 7px;
+  color:#4ade80
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#172b1b;
+  color:#a7f3b1;
+  font-size:12px;
+  font-weight:800
+}
+
+.bar{
+  height:7px;
+  background:#1b2d20;
+  border-radius:99px;
+  overflow:hidden;
+  margin:12px 0
+}
+
+.fill{
+  height:100%;
+  background:#4ade80
+}
+
+.reason{
+  color:#b8c4d7;
+  line-height:1.55;
+  font-size:14px
+}
+
+.note{
+  max-width:1200px;
+  margin:auto;
+  padding:0 6% 30px;
+  color:#aeb9c8;
+  font-size:13px;
+  line-height:1.55
+}
+
+.note b{
+  color:#ffdf00
+}
+
+footer{
+  text-align:center;
+  color:#68738c;
+  padding:25px;
+  border-top:1px solid #1b3a22;
+  font-size:13px
+}
+
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .hero h1{font-size:36px}
+  nav{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">RalloHR</div>
+
+  <nav>
+    <a href="/">Best Pick</a>
+    <a href="/picks">Top</a>
+    <a href="/underrated">Underrated</a>
+  </nav>
+</header>
+
+<section class="hero">
+
+  <div class="eyebrow">🔥 DAILY UNDER-THE-RADAR BOARD</div>
+
+  <h1>Underrated HR Picks</h1>
+
+  <p>
+    Strong matchup. Low hype. High upside.
+    RalloHR looks for home-run candidates who may be overlooked
+    but still have favorable power and matchup signals.
+  </p>
+
+</section>
+
+<section class="stats">
+
+  <div class="stat">
+    <b id="count">—</b>
+    <small>Underrated candidates</small>
+  </div>
+
+  <div class="stat">
+    <b id="date">—</b>
+    <small>Board date</small>
+  </div>
+
+  <div class="stat">
+    <b id="updated">—</b>
+    <small>Last automatic refresh</small>
+  </div>
+
+</section>
+
+<div class="note">
+  <b>How this works:</b>
+  These picks emphasize players who may have lower public attention
+  while still showing useful power, heat, lineup and matchup signals.
+</div>
+
+<section class="grid" id="picks">
+
+  <div class="card">
+    <p class="reason">Loading today's underrated picks...</p>
+  </div>
+
+</section>
+
+<footer>
+  RalloHR • Automatic MLB research dashboard • No pick is guaranteed.
+</footer>
+
+<script>
+
+function esc(s){
+  return String(s ?? "").replace(
+    /[&<>"']/g,
+    m => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m])
+  );
+}
+
+async function loadUnderrated(){
+
+  const res = await fetch(
+    "../data/rallohr.json?ts=" + Date.now(),
+    {cache:"no-store"}
+  );
+
+  if(!res.ok){
+    throw new Error("Daily RalloHR data could not be loaded.");
+  }
+
+  const data = await res.json();
+
+  const items = data.underrated || [];
+
+  document.getElementById("count").textContent = items.length;
+
+  document.getElementById("date").textContent =
+    data.date || "—";
+
+  document.getElementById("updated").textContent =
+    data.updatedAt
+      ? new Date(data.updatedAt).toLocaleString()
+      : "—";
+
+  const box = document.getElementById("picks");
+
+  if(!items.length){
+
+    box.innerHTML = `
+      <div class="card">
+        <p class="reason">
+          No underrated candidates are available yet.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML = items.map((p,i)=>`
+
+    <article class="card">
+
+      <div class="top">
+
+        <div>
+
+          <span class="badge">
+            #${i+1} UNDERRATED
+          </span>
+
+          <div class="player" style="margin-top:10px">
+            ${esc(p.name)}
+          </div>
+
+          <div class="muted">
+            ${esc(p.team)} •
+            ${esc(p.game || "Today's game")}
+          </div>
+
+        </div>
+
+        <span class="badge">
+          ${esc(p.opponentHand || "TBD")} SP
+        </span>
+
+      </div>
+
+      <div class="pick">
+        HOME RUN
+      </div>
+
+      <div class="muted">
+        Confidence ${esc(p.score)}/10
+        • Heat ${esc(p.heat || "—")}
+      </div>
+
+      <div class="bar">
+        <div
+          class="fill"
+          style="width:${Math.max(
+            0,
+            Math.min(100, Number(p.score)*10)
+          )}%">
+        </div>
+      </div>
+
+      <p class="reason">
+        ${esc(p.reason)}
+      </p>
+
+      <p class="muted">
+        <b>Pitcher:</b>
+        ${esc(p.opponent || "TBD")}
+        •
+        <b>Lineup:</b>
+        ${p.lineupConfirmed ? "Confirmed" : "Provisional"}
+      </p>
+
+    </article>
+
+  `).join("");
+
+}
+
+loadUnderrated().catch(err=>{
+
+  document.getElementById("picks").innerHTML = `
+    <div class="card">
+      <p class="reason">
+        ${esc(err.message)}
+      </p>
+    </div>
+  `;
+
+});
+
+</script>
+
+</body>
+</html>
