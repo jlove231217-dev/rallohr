@@ -1,0 +1,18 @@
+{
+  "name": "RalloHR",
+  "short_name": "RalloHR",
+  "description": "Green and gold MLB home-run prop dashboard.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06140a",
+  "theme_color": "#0b2112",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
