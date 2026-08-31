@@ -16,7 +16,16 @@ jobs:
       - name: Get RalloHR files
         uses: actions/checkout@v4
 
-      - name: Update daily timestamp
+      - name: Get today's MLB schedule
+        run: |
+          DATE=$(date -u +"%Y-%m-%d")
+
+          curl -L "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=$DATE&hydrate=probablePitcher,team" \
+            -o mlb-data.json
+
+          echo "RalloHR MLB data updated for $DATE"
+
+      - name: Update timestamp
         run: |
           echo "RalloHR updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > last-updated.txt
 
@@ -24,6 +33,6 @@ jobs:
         run: |
           git config user.name "RalloHR Bot"
           git config user.email "actions@github.com"
-          git add last-updated.txt
-          git diff --cached --quiet || git commit -m "Daily RalloHR update"
+          git add mlb-data.json last-updated.txt
+          git diff --cached --quiet || git commit -m "Daily RalloHR MLB update"
           git push
